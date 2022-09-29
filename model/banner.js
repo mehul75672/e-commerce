@@ -1,13 +1,16 @@
 const mongoose=require("mongoose");
 
 const benar= new mongoose.Schema({
-    benar_name:{
-        type:String,
-        require:true
+    banner_title:{
+       type:String,
+       required:true
     },
-    benar_img:{
+    banner_desc:{
         type:String,
-        require:true
+        required:true
+    },
+    banner_img:{
+        type:String,
     },
      status:{
         type:Boolean,
@@ -15,7 +18,7 @@ const benar= new mongoose.Schema({
      },
      link:{
         type:String,
-        require:true
+        required:true
      }
 },{
     timestamps:true

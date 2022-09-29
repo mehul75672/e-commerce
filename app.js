@@ -7,7 +7,8 @@ var path = require('path');
 var logger = require('morgan');
 var app = express();
 const category=require("./routes/category");
-
+const banner=require("./routes/banner");
+const brands=require("./routes/brands");
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -28,7 +29,8 @@ app.use(express.static(path.join(__dirname, 'public/images')));
 // );
 
 app.use("/category",category);
-
+app.use("/banner",banner);
+app.use("/brands",brands);
  app.get("/",(req,res)=>{
    res.status(200).send("hello");
  }) 
