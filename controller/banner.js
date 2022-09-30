@@ -10,9 +10,9 @@ const fs =require("fs");
             link:req.body.link   
          })    
          await add.save();  
-         return res.status(200).json(add);
+         return res.status(201).json({status:true,result:add});
     } catch (error) {
-        return res.status(400).json({error:error.message});
+        return res.status(500).json({error:error.message});
     }
  }
 
@@ -29,16 +29,16 @@ const fs =require("fs");
       }
        
    } catch (error) {
-      return res.status(400).json({error:error.message});
+      return res.status(500).json({error:error.message});
    }
  }
 
  const banner_all=async(req,res)=>{
     try {
       const all= await banner.find();
-      return res.status(200).json(all)
+      return res.status(200).json({status:true,result:all})
     } catch (error) {
-      return res.status(400).json({error:error.message});
+      return res.status(500).json({error:error.message});
     }
  }
 

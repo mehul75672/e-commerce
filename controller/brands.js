@@ -8,9 +8,9 @@ const fs =require("fs");
              img:req.file.filename  
          })    
          await add.save();  
-         return res.status(200).json(add);
+         return res.status(201).json({status:true,result:add});
     } catch (error) {
-        return res.status(400).json({error:error.message});
+        return res.status(500).json({error:error.message});
     }
  }
 
@@ -23,20 +23,20 @@ const fs =require("fs");
          get.delete(); 
          return res.status(200).json("banner delete successfully");
       } else {
-         return res.status(401).json("banner not exist");
+         return res.status(404).json("banner not exist");
       }
        
    } catch (error) {
-      return res.status(400).json({error:error.message});
+      return res.status(500).json({error:error.message});
    }
  }
 
  const brands_all=async(req,res)=>{
     try {
       const all= await brands.find();
-      return res.status(200).json(all)
+      return res.status(200).json({status:true,result:all});
     } catch (error) {
-      return res.status(400).json({error:error.message});
+      return res.status(500).json({error:error.message});
     }
  }
 

@@ -8,15 +8,15 @@ const category_add = async (req, res) => {
             category_img: req.file.filename
         })
         await add.save();
-        return res.status(200).json(add);
+        return res.status(201).json({ status: true, result: add });
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
 
 const category_delete = async (req, res) => {
     const id = req.params.id
-   
+
     try {
 
         const get = await category.findById(id);
@@ -30,13 +30,13 @@ const category_delete = async (req, res) => {
         }
     }
     catch (error) {
-        return res.status(400).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
-  const category_get=async(req,res)=>{
-    const all= await category.find().limit(11);
-    return res.status(200).json(all)
-  }
+const category_get = async (req, res) => {
+    const all = await category.find().limit(11);
+    return res.status(200).json({ status: true, result: all });
+}
 
 
-module.exports = { category_add, category_delete ,category_get };
+module.exports = { category_add, category_delete, category_get };
