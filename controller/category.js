@@ -1,3 +1,4 @@
+"use strict";
 const category = require("../model/category");
 const fs = require("fs");
 const category_add = async (req, res) => {

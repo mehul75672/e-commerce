@@ -1,3 +1,4 @@
+"use strict";
 const product = require("../model/product");
 
 const fs = require("fs");
@@ -88,14 +89,14 @@ const new_arrivals = async (req, res) => {
     }
 }
 
-const productget=async(req,res)=>{
-    const id=req.params.id
+const productget = async (req, res) => {
+    const id = req.params.id
     try {
-        const discount = await product.find({brands_id:id} );
+        const discount = await product.find({ brands_id: id });
         return res.status(200).json({ status: true, result: discount })
     } catch (error) {
         return res.status(500), json({ error: error.message });
     }
 }
 
-module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals ,productget };
+module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productget };
