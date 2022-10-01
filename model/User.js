@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    lastnamae: {
+    lastname: {
         type: String,
         required: true
     },
@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    status:{
+        type:Boolean,
+        default:false
     }
 }, {
     timestamps: true

@@ -7,6 +7,10 @@ const categorySchema = new mongoose.Schema({
     },
     category_img: {
         type: String,
+    },
+    status:{
+        type:Boolean,
+        default:true
     }
 }, { timestamps: true });
 

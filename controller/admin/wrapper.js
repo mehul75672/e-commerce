@@ -1,5 +1,5 @@
 "use strict";
-const wrapper = require("../model/wrapper")
+const wrapper = require("../../model/wrapper")
 
 
 const wrapper_add = async (req, res) => {
@@ -20,5 +20,6 @@ const wrapper_all = async (req, res) => {
     var all = await wrapper.find();
     return res.status(200).json({ status: true, result: all });
 }
+
 
 module.exports = { wrapper_add, wrapper_all }

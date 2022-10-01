@@ -1,5 +1,5 @@
 "use strict";
-const brands = require("../model/brands");
+const brands = require("../../model/brands");
 const fs = require("fs");
 
 const brands_add = async (req, res) => {

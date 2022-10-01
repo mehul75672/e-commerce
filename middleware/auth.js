@@ -19,4 +19,4 @@ const auth = async (req, res, next) => {
         return res.status(500).json("provid the token");
     }
 }
-module.exports = { auth }
+module.exports = { auth };

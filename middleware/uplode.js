@@ -2,7 +2,7 @@ const multer = require('multer')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg') {
-        return cd(new Error("Supported image files are jpeg, jpg, and png"));
+      return cd(new Error("Supported image files are jpeg, jpg, and png"));
     }
     cb(null, './public/images');
   },

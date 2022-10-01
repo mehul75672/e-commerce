@@ -1,5 +1,5 @@
 "use strict";
-const banner = require("../model/banner");
+const banner = require("../../model/banner");
 const fs = require("fs");
 
 const banner_add = async (req, res) => {

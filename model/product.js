@@ -4,7 +4,7 @@ const product_schema = new mongoose.Schema({
     category_id: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref:"categry"
+        ref: "categry"
     },
     brands_id: {
         type: mongoose.Types.ObjectId,
@@ -21,8 +21,12 @@ const product_schema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    discount:{
-        type:String,
+    discount: {
+        type: String,
+    },
+    status:{
+        type:Boolean,
+        default:true
     }
 }, {
     timestamps: true

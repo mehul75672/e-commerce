@@ -1,5 +1,5 @@
 'use strict'
-const Users = require('../model/User');
+const Users = require('../../model/User');
 var validator = require("email-validator");
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -35,8 +35,8 @@ const adduser = async (req, res) => {
         const hash = bcrypt.hashSync(req.body.password, 10);
         let add = new Users({
             firstname: req.body.firstname,
-            lastnamae: req.body.lastnamae,
-            fullname: `${req.body.firstname + ' ' + req.body.lastnamae}`,
+            lastname: req.body.lastname,
+            fullname: `${req.body.firstname + ' ' + req.body.lastname}`,
             email: req.body.email,
             password: hash
         });
@@ -104,4 +104,48 @@ const all_user = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 }
-module.exports = { adduser, loginuser, all_user }
+
+const changePassword = async (req, res) => {
+    let id = req.send.id;
+    try {
+        const get = await Users.findById(id);
+        if (get) {
+            let old_password = req.body.old_password
+            let password = req.body.password
+            let confirm_password = req.body.confirm_password
+            const valid_password = bcrypt.compare(old_password, get.password);
+            if (!valid_password) { return res.status(400).json({ error: "not match old password" }); }
+            let passwordcheck = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+            if (!password.match(passwordcheck)) { return res.status(400).json({ message: "7 to 15 characters which contain at least one numeric digit and a special character" }) }
+            if (!(password === confirm_password)) { return res.status(400).json({ error: "not match Password and confirm_password" }); }
+            const hash = bcrypt.hashSync(password, 10);
+            get.password = hash;
+            get.save();
+            return res.status(200).json({ status: true, result: get });
+        } else {
+            return res.status(400).json({ error: "User does not login" });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+
+const pagination= async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skipIndex = (page - 1) * limit;
+
+    try {
+        let results = await Users.find()
+            .limit(limit)
+            .skip(skipIndex);
+        return res.status(200).json({
+            status: true,
+            results: results
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+module.exports = { adduser, loginuser, all_user, changePassword ,pagination}

@@ -1,5 +1,5 @@
 "use strict";
-const product = require("../model/product");
+const product = require("../../model/product");
 
 const fs = require("fs");
 const { json } = require("express");
@@ -98,5 +98,6 @@ const productget = async (req, res) => {
         return res.status(500), json({ error: error.message });
     }
 }
+
 
 module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productget };
