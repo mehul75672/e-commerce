@@ -1,6 +1,6 @@
 
 var router = require('express').Router();
-const { category_add, category_delete, category_get, category_update } = require("../../controller/admin/category");
+const { category_add, category_delete, category_get, category_update } = require("../../controller/category");
 const { upload } = require("../../middleware/uplode")
 
 router.post('/add', upload.single("category_img"), category_add);

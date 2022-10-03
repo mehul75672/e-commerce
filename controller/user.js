@@ -1,5 +1,5 @@
 'use strict'
-const Users = require('../../model/User');
+const Users = require('../model/User');
 var validator = require("email-validator");
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');

@@ -1,4 +1,4 @@
-const { wrapper_add, wrapper_all } = require('../../controller/admin/wrapper');
+const { wrapper_add, wrapper_all } = require('../../controller/wrapper');
 const { upload } = require('../../middleware/uplode');
 
 const router = require('express').Router();

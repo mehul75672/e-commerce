@@ -1,4 +1,9 @@
 var router = require('express').Router();
+const product=require("./product")
 const user = require("./user");
-router.use("/api/admin/user", user);
-module.exports=router;
+
+
+const prefix = "/api/user"
+router.use(prefix + "/user", user);
+router.use(prefix+"/product",product);
+module.exports = router;

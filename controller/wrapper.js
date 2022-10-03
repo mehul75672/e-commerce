@@ -1,5 +1,5 @@
 "use strict";
-const wrapper = require("../../model/wrapper")
+const wrapper = require("../model/wrapper")
 
 
 const wrapper_add = async (req, res) => {

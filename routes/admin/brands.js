@@ -1,5 +1,5 @@
 var router = require('express').Router();
-const { brands_add, brands_all, brands_delete } = require("../../controller/admin/brands")
+const { brands_add, brands_all, brands_delete } = require("../../controller/brands")
 const { upload } = require("../../middleware/uplode")
 
 

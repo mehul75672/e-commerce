@@ -1,7 +1,8 @@
 "use strict";
 const path = require("path")
-const category = require("../../model/category");
+const category = require("../model/category");
 const fs = require("fs");
+
 const category_add = async (req, res) => {
     const { category_name } = req.body;
     try {
@@ -12,9 +13,11 @@ const category_add = async (req, res) => {
         await add.save();
         return res.status(201).json({ status: true, result: add });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: error.message });
     }
 }
+
 const category_update = async (req, res) => {
     try {
         const id = req.params.id
@@ -22,7 +25,7 @@ const category_update = async (req, res) => {
         let images
         if (req.file) {
             images = req.file.filename
-            const filePath = path.join(__dirname, '../../public/images/'+get.category_img);
+            const filePath = path.join(__dirname,process.env.images+get.category_img);
             fs.unlinkSync(filePath);
         } else {
             images = get.category_img
@@ -43,13 +46,13 @@ const category_delete = async (req, res) => {
     try {
         const get = await category.findById(id);
         if (get) {
-            const filePath = path.join(__dirname, '../../public/images/'+get.category_img);
+            const filePath = path.join(__dirname,process.env.images+get.category_img);
             console.log(filePath);
             fs.unlinkSync(filePath);
             get.delete();
             return res.status(200).json("category delete successfully");
         } else {
-            return res.status(400).json("category nod exist");
+            return res.status(400).json("category not exist");
         }
     }
     catch (error) {

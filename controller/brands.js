@@ -1,5 +1,5 @@
 "use strict";
-const brands = require("../../model/brands");
+const brands = require("../model/brands");
 const fs = require("fs");
 
 const brands_add = async (req, res) => {
@@ -20,7 +20,7 @@ const brands_delete = async (req, res) => {
       const id = req.params.id
       const get = banner.findById(id);
       if (get) {
-         fs.unlinkSync('./public/images/' + get.img);
+         fs.unlinkSync(process.env.images+ get.img);
          get.delete();
          return res.status(200).json("banner delete successfully");
       } else {

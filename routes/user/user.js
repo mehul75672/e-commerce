@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { all_user, loginuser, adduser, changePassword, pagination } = require('../../controller/user/user');
+const { all_user, loginuser, adduser, changePassword, pagination } = require('../../controller/user');
 const { auth } = require("../../middleware/auth");
 
 //pagination

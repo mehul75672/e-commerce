@@ -1,12 +1,13 @@
 "use strict";
-const product = require("../../model/product");
+const product = require("../model/product");
 
 const fs = require("fs");
 const { json } = require("express");
 
+
+//admin
 const product_add = async (req, res) => {
     try {
-        console.log(req.file);
         const add = new product({
             category_id: req.body.category_id,
             brands_id: req.body.brands_id,
@@ -27,8 +28,8 @@ const product_all = async (req, res) => {
     try {
         const all = await product.aggregate([
             {
-                $lookup: {
-                    from: 'categries',
+                $lookup: { 
+                    from: 'categories',
                     localField: 'category_id',
                     foreignField: '_id',
                     as: 'category'
@@ -41,12 +42,37 @@ const product_all = async (req, res) => {
                     as: 'brands'
                 }
             }])
-        return res.status(200).json({ status: true, result: all });
+        return res.status(200).json({ status: true, result:all });
     } catch (error) {
         return res.status(500).json({ error: error.message })
     }
 }
-
+const product_update = async (req, res) => {
+    try {
+        const id = req.params.id
+        const get = await product.findById(id);
+        let images
+        if (req.file) {
+            images = req.file.filename
+            const filePath = path.join(__dirname, '../../public/images/'+get.product_img);
+            fs.unlinkSync(filePath);
+        } else {
+            images = get.product_img
+        }
+        const result = await product.findByIdAndUpdate(id, {
+            category_id: req.body.category_id,
+            brands_id: req.body.brands_id,
+            name: req.body.name,
+            product_img:images,
+            price: req.body.price,
+            discount: req.body.discount
+        })
+        console.log(result);
+        return res.status(201).json({ message: "category update success fully" });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
 
 const product_delete = async (req, res) => {
     try {
@@ -54,7 +80,7 @@ const product_delete = async (req, res) => {
         let get = await product.findById(id);
         if (get) {
 
-            fs.unlinkSync('./public/images/' + get.product_img);
+            fs.unlinkSync(process.env.images+ get.product_img);
             get.delete();
             return res.status(200).json("product delete succass fully");
 
@@ -66,6 +92,13 @@ const product_delete = async (req, res) => {
     }
 }
 
+
+
+
+
+
+
+//user
 const product_discount = async (req, res) => {
     try {
         const discount = await product.find({ discount: { $gt: 50 } });
@@ -100,4 +133,4 @@ const productget = async (req, res) => {
 }
 
 
-module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productget };
+module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productget ,product_update};

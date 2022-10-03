@@ -23,8 +23,9 @@ const adminroutes=require("./routes/admin");
 const userroutes=require("./routes/user")
 app.use(adminroutes);
 app.use(userroutes);
-require
-('./seeder/user')
+require('./seeder/admin')
+
+
 
 app.get("/", (req, res) => {
   res.status(200).send("hello");

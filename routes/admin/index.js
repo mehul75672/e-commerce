@@ -7,12 +7,12 @@ const brands = require("./brands");
 const product = require('./product');
 const wrapper = require('./Wrapper');
 
-var prifix="/api/admin"
-router.use(prifix+"/category", category);
-router.use(prifix+"/banner", banner);
-router.use(prifix+"/brands", brands);
-router.use(prifix+"/product", product);
-router.use(prifix+'/wrapper', wrapper);
+var prefix = "/api/admin"
+router.use(prefix + "/category", category);
+router.use(prefix + "/banner", banner);
+router.use(prefix + "/brands", brands);
+router.use(prefix + "/product", product);
+router.use(prefix + '/wrapper', wrapper);
 
 
-module.exports=router;
+module.exports = router;
