@@ -20,7 +20,8 @@ app.use(express.static(path.join(__dirname, 'public/images')));
 
 // all routes
 const adminroutes=require("./routes/admin");
-const userroutes=require("./routes/user")
+const userroutes=require("./routes/user");
+
 app.use(adminroutes);
 app.use(userroutes);
 require('./seeder/admin')
@@ -31,8 +32,8 @@ app.get("/", (req, res) => {
   res.status(200).send("hello");
 })
 
-const HOSTNAME = '192.168.29.118';
+
 const PORT = process.env.port;
-app.listen(PORT, HOSTNAME, () => {
-  console.log(`Server running at http://${HOSTNAME}:${PORT}`)
+app.listen(PORT, process.env.HOSTNAME, () => {
+  console.log(`Server running at http://${process.env.HOSTNAME}:${PORT}`)
 });

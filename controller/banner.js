@@ -16,7 +16,7 @@ const banner_add = async (req, res) => {
       return res.status(500).json({ error: error.message });
    }
 }
-
+  
 
 const banner_update = async (req, res) => {
    try {    
@@ -77,4 +77,10 @@ const banner_all = async (req, res) => {
    }
 }
 
-module.exports = { banner_add, banner_all, banner_delete, banner_update };
+const  banner_getone = async (req, res) => {
+   var id = req.params.id
+   const one = await banner.findById(id);
+   return res.status(200).json({ status: true, result: one });
+}
+
+module.exports = { banner_add, banner_all, banner_delete, banner_update ,banner_getone};

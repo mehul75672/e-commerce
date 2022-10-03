@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const benar = new mongoose.Schema({
+const banner = new mongoose.Schema({
     banner_title: {
         type: String,
         required: true
@@ -25,4 +25,4 @@ const benar = new mongoose.Schema({
 })
 
 
-module.exports = mongoose.model("benar", benar);
+module.exports = mongoose.model("banner", banner);

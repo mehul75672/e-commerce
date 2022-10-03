@@ -32,6 +32,7 @@ const brands_delete = async (req, res) => {
    }
 }
 
+
 const brands_all = async (req, res) => {
    try {
       const all = await brands.find();

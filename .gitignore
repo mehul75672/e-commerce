@@ -2,6 +2,10 @@
 /package-lock.json
 
 .env
-#  URL
-#  PORT
-#  SECRETKEY
+# URL
+# PORT
+# SECRETKEY
+# ADMIN_PASSWORD
+# ADMIN_EMAIL
+# IMAGES //images uplod path
+# HOSTNAME
