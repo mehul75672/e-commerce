@@ -22,7 +22,7 @@ const product_schema = new mongoose.Schema({
         required: true
     },
     discount: {
-        type: String,
+        type: Number,
     },
     status: {
         type: Boolean,

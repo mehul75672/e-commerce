@@ -1,7 +1,8 @@
 "use strict";
 const brands = require("../model/brands");
-const path=require("path");
+const path = require("path");
 const fs = require("fs");
+const product = require("../model/product");
 
 const brands_add = async (req, res) => {
    try {
@@ -19,18 +20,24 @@ const brands_add = async (req, res) => {
 const brands_delete = async (req, res) => {
    try {
       const id = req.params.id
-      const get =await brands.findById(id);
-      console.log(get);
+      const get = await brands.findById(id);
       if (get) {
-         const filePath = path.join(__dirname, process.env.images + get.img);
-         console.log(filePath);
-         fs.unlinkSync(filePath);
-         get.delete();
-         return res.status(200).json("brands delete successfully");
+         const ge = await product.findOne({ brands_id: get.id });
+         if (ge) {
+            const filePat = path.join(__dirname, process.env.images + get.img);
+            fs.unlinkSync(filePat);
+            get.delete();
+            const filePath = path.join(__dirname, process.env.images + ge.product_img);
+            console.log(filePath);
+            fs.unlinkSync(filePath);
+            ge.delete();
+            return res.status(200).json("brands delete successfully");
+         } else {
+            res.status(400).json("product not exist");
+         }
       } else {
          return res.status(404).json("brands not exist");
       }
-
    } catch (error) {
       return res.status(500).json({ error: error.message });
    }
@@ -38,7 +45,7 @@ const brands_delete = async (req, res) => {
 
 
 const brands_update = async (req, res) => {
-   try {    
+   try {
       const id = req.params.id
       const get = await brands.findById(id);
       let images
@@ -55,7 +62,7 @@ const brands_update = async (req, res) => {
                name: req.body.name,
                img: images
             }
-         },{new:true})
+         }, { new: true })
       return res.status(200).json({ message: result });
    } catch (error) {
       console.log(error);
@@ -72,9 +79,9 @@ const brands_all = async (req, res) => {
    }
 }
 
-const  brands_getone = async (req, res) => {
+const brands_getone = async (req, res) => {
    var id = req.params.id
    const one = await brands.findById(id);
    return res.status(200).json({ status: true, result: one });
 }
-module.exports = { brands_add, brands_delete ,brands_update , brands_all, brands_getone};
+module.exports = { brands_add, brands_delete, brands_update, brands_all, brands_getone };

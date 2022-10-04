@@ -2,6 +2,7 @@
 const path = require("path")
 const category = require("../model/category");
 const fs = require("fs");
+const product = require("../model/product");
 
 const category_add = async (req, res) => {
     const { category_name } = req.body;
@@ -45,11 +46,20 @@ const category_delete = async (req, res) => {
     try {
         const get = await category.findById(id);
         if (get) {
-            const filePath = path.join(__dirname, process.env.images + get.category_img);
-            console.log(filePath);
-            fs.unlinkSync(filePath);
-            get.delete();
-            return res.status(200).json("category delete successfully");
+            const ge= await product.findOne({category_id:get.id});
+            if (ge) {
+                const filePat = path.join(__dirname, process.env.images + get.category_img);
+                console.log(filePat);
+                fs.unlinkSync(filePat);
+                get.delete();
+                const filePath = path.join(__dirname, process.env.images + ge.product_img);
+                console.log(filePath);
+                fs.unlinkSync(filePath);
+                ge.delete();
+                return res.status(200).json("category delete successfully");
+            } else {
+                res.status(400).json("product not exist");
+            }
         } else {
             return res.status(400).json("category not exist");
         }

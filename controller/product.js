@@ -2,13 +2,16 @@
 const product = require("../model/product");
 
 const fs = require("fs");
-const path=require("path")
+const path = require("path")
 const { json } = require("express");
 
 
 //admin
 const product_add = async (req, res) => {
     try {
+        if (req.body.discount >= 100) {
+            return res.status(400).json({ message: "discount min 100" });
+        }
         const add = new product({
             category_id: req.body.category_id,
             brands_id: req.body.brands_id,
@@ -35,14 +38,18 @@ const product_all = async (req, res) => {
                     foreignField: '_id',
                     as: 'category'
                 },
-            }, {
+
+            },
+            {
                 $lookup: {
                     from: 'brands',
                     localField: 'brands_id',
                     foreignField: '_id',
                     as: 'brands'
                 }
-            }])
+            }
+        ]);
+
         return res.status(200).json({ status: true, result: all });
     } catch (error) {
         return res.status(500).json({ error: error.message })
