@@ -1,5 +1,6 @@
 "use strict";
 const brands = require("../model/brands");
+const path=require("path");
 const fs = require("fs");
 
 const brands_add = async (req, res) => {
@@ -18,13 +19,16 @@ const brands_add = async (req, res) => {
 const brands_delete = async (req, res) => {
    try {
       const id = req.params.id
-      const get = banner.findById(id);
+      const get =await brands.findById(id);
+      console.log(get);
       if (get) {
-         fs.unlinkSync(process.env.images+ get.img);
+         const filePath = path.join(__dirname, process.env.images + get.img);
+         console.log(filePath);
+         fs.unlinkSync(filePath);
          get.delete();
-         return res.status(200).json("banner delete successfully");
+         return res.status(200).json("brands delete successfully");
       } else {
-         return res.status(404).json("banner not exist");
+         return res.status(404).json("brands not exist");
       }
 
    } catch (error) {
@@ -32,6 +36,32 @@ const brands_delete = async (req, res) => {
    }
 }
 
+
+const brands_update = async (req, res) => {
+   try {    
+      const id = req.params.id
+      const get = await brands.findById(id);
+      let images
+      if (req.file) {
+         images = req.file.filename
+         const filePath = path.join(__dirname, process.env.images + get.img);
+         fs.unlinkSync(filePath);
+      } else {
+         images = get.img
+      }
+      const result = await brands.findByIdAndUpdate(id,
+         {
+            $set: {
+               name: req.body.name,
+               img: images
+            }
+         },{new:true})
+      return res.status(200).json({ message: result });
+   } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: error.message });
+   }
+}
 
 const brands_all = async (req, res) => {
    try {
@@ -42,4 +72,9 @@ const brands_all = async (req, res) => {
    }
 }
 
-module.exports = { brands_add, brands_all, brands_delete };
+const  brands_getone = async (req, res) => {
+   var id = req.params.id
+   const one = await brands.findById(id);
+   return res.status(200).json({ status: true, result: one });
+}
+module.exports = { brands_add, brands_delete ,brands_update , brands_all, brands_getone};

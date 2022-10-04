@@ -131,7 +131,7 @@ const changePassword = async (req, res) => {
 }
 
 
-const pagination= async (req, res) => {
+const pagination = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skipIndex = (page - 1) * limit;
@@ -148,4 +148,4 @@ const pagination= async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
-module.exports = { adduser, loginuser, all_user, changePassword ,pagination}
+module.exports = { adduser, loginuser, all_user, changePassword, pagination }

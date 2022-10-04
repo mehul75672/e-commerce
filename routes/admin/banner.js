@@ -1,6 +1,6 @@
 var router = require('express').Router();
-const { banner_add, banner_all, banner_delete, banner_update, banner_getone } = require("../../controller/banner")
-const { upload } = require("../../middleware/uplode")
+const { banner_add, banner_all, banner_delete, banner_update, banner_getone } = require("../../controller/banner");
+const { upload } = require("../../middleware/uplode");
 
 router.post("/add", upload.single("banner_img"), banner_add);
 router.get("/all", banner_all);
