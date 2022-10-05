@@ -22,27 +22,23 @@ const brands_delete = async (req, res) => {
       const id = req.params.id
       const get = await brands.findById(id);
       if (get) {
+         const filePat = path.join(__dirname, process.env.images + get.img);
+         fs.unlinkSync(filePat);
+         get.delete();
          const ge = await product.findOne({ brands_id: get.id });
          if (ge) {
-            const filePat = path.join(__dirname, process.env.images + get.img);
-            fs.unlinkSync(filePat);
-            get.delete();
             const filePath = path.join(__dirname, process.env.images + ge.product_img);
-            console.log(filePath);
             fs.unlinkSync(filePath);
             ge.delete();
-            return res.status(200).json("brands delete successfully");
-         } else {
-            res.status(400).json("product not exist");
-         }
+         } 
+         return res.status(200).json({ status: true, message: "brands delete successfully" });
       } else {
-         return res.status(404).json("brands not exist");
+         return res.status(404).json({ status: false, message: "brands not exist" });
       }
    } catch (error) {
       return res.status(500).json({ error: error.message });
    }
 }
-
 
 const brands_update = async (req, res) => {
    try {
@@ -63,7 +59,7 @@ const brands_update = async (req, res) => {
                img: images
             }
          }, { new: true })
-      return res.status(200).json({ message: result });
+      return res.status(200).json({ status: true, message: result });
    } catch (error) {
       console.log(error);
       return res.status(500).json({ error: error.message });

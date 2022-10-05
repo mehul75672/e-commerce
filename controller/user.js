@@ -9,30 +9,21 @@ const adduser = async (req, res) => {
 
         let { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).json({
-                message: "Email or password missing."
-            })
+            return res.status(400).json({ message: "Email or password missing." })
         }
         const emailValid = await validator.validate(email);
         if (!emailValid) {
-
-            return res.status(400).send({
-                message: "Email is not valid."
-            })
+            return res.status(400).send({ message: "Email is not valid." })
         }
         let passwordcheck = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
         if (!password.match(passwordcheck)) {
-            return res.status(400).json({
-                message: "7 to 15 characters which contain at least one numeric digit and a special character"
-            })
+            return res.status(400).json({ message: "7 to 15 characters which contain at least one numeric digit and a special character" })
         }
         const email_find = await Users.findOne({ email: req.body.email });
         if (email_find) {
-            return res.status(400).json({
-                message: "Email is allrediy exit."
-            })
+            return res.status(400).json({ message: "Email is allrediy exit." })
         }
-        const hash = bcrypt.hashSync(req.body.password, 10);
+        const hash = bcrypt.hashSync(password, 10);
         let add = new Users({
             firstname: req.body.firstname,
             lastname: req.body.lastname,
@@ -40,10 +31,8 @@ const adduser = async (req, res) => {
             email: req.body.email,
             password: hash
         });
-
         const ad = await add.save();
         return res.status(201).json("user registr succass fully");
-
     }
     catch (error) {
         return res.status(500).json({ error: error.message });
@@ -53,42 +42,27 @@ const adduser = async (req, res) => {
 const loginuser = async (req, res) => {
     try {
         let { email, password } = req.body;
-
         if (!email || !password) {
-            return res.status(400).json({
-                message: "Email or password missing."
-            })
+            return res.status(400).json({ message: "Email or password missing." })
         }
         const emailValid = await validator.validate(email);
         if (!emailValid) {
-
-            return res.status(400).json({
-                message: "Email is not valid."
-
-            })
+            return res.status(400).json({ message: "Email is not valid." })
         }
         let passwordcheck = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
         if (!password.match(passwordcheck)) {
-            return res.status(400).json({
-                message: "7 to 15 characters which contain at least one numeric digit and a special character"
-            })
+            return res.status(400).json({ message: "7 to 15 characters which contain at least one numeric digit and a special character" })
         }
         const login = await Users.findOne({ email: email })
-        if (login) {
-
-            const valid_password = bcrypt.compareSync(password, login.password);
-
-            if (valid_password) {
-                const token = await jwt.sign({ id: login.id }, process.env.SECRETKEY);
-                res.status(200).json({ status: true, result: token });
-            }
-            else {
-                res.status(400).json({ error: "Invalid Email And Password" });
-            }
-        }
-        else {
+        if (!login) {
             res.status(400).json({ error: "User does not exist" });
         }
+        const valid_password = bcrypt.compareSync(password, login.password);
+        if (!valid_password) {
+            return res.status(400).json({ error: "Invalid Email And Password" });
+        }
+        const token = await jwt.sign({ id: login.id }, process.env.SECRETKEY);
+        return res.status(200).json({ status: true, result: token });
     }
     catch (error) {
         return res.status(500).json({ error: error.message });
@@ -130,12 +104,10 @@ const changePassword = async (req, res) => {
     }
 }
 
-
 const pagination = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skipIndex = (page - 1) * limit;
-
     try {
         let results = await Users.find()
             .limit(limit)

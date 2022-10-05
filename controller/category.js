@@ -34,8 +34,8 @@ const category_update = async (req, res) => {
         const result = await category.findByIdAndUpdate(id, {
             category_name: req.body.category_name,
             category_img: images
-        })
-        return res.status(201).json({ message: "category update success fully" });
+        }, { new: true })
+        return res.status(201).json({ status: false, message: "category update success fully" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -46,22 +46,20 @@ const category_delete = async (req, res) => {
     try {
         const get = await category.findById(id);
         if (get) {
-            const ge= await product.findOne({category_id:get.id});
+            const filePat = path.join(__dirname, process.env.images + get.category_img);
+            console.log(filePat);
+            fs.unlinkSync(filePat);
+            get.delete();
+            const ge = await product.findOne({ category_id: get.id });
             if (ge) {
-                const filePat = path.join(__dirname, process.env.images + get.category_img);
-                console.log(filePat);
-                fs.unlinkSync(filePat);
-                get.delete();
                 const filePath = path.join(__dirname, process.env.images + ge.product_img);
                 console.log(filePath);
                 fs.unlinkSync(filePath);
-                ge.delete();
-                return res.status(200).json("category delete successfully");
-            } else {
-                res.status(400).json("product not exist");
-            }
+                ge.delete(); 
+            } 
+             return res.status(200).json({ status: false, message: "category delete successfully" });
         } else {
-            return res.status(400).json("category not exist");
+            return res.status(400).json({ status: false, message: "category not exist" });
         }
     }
     catch (error) {

@@ -10,7 +10,7 @@ const { json } = require("express");
 const product_add = async (req, res) => {
     try {
         if (req.body.discount >= 100) {
-            return res.status(400).json({ message: "discount min 100" });
+            return res.status(400).json({ status: false, message: "discount min 100" });
         }
         const add = new product({
             category_id: req.body.category_id,
@@ -21,7 +21,7 @@ const product_add = async (req, res) => {
             discount: req.body.discount
         })
         await add.save();
-        return res.status(201).json("product add succassfully");
+        return res.status(201).json({ status: true, message: "product add successfully" });
 
     } catch (error) {
         return res.status(500).json({ error: error.message })
@@ -55,6 +55,7 @@ const product_all = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
+
 const product_update = async (req, res) => {
     try {
         const id = req.params.id
@@ -74,9 +75,9 @@ const product_update = async (req, res) => {
             product_img: images,
             price: req.body.price,
             discount: req.body.discount
-        })
+        }, { new: true })
         console.log(result);
-        return res.status(201).json({ message: "product update success fully" });
+        return res.status(201).json({ status: true, message: "product update success fully" });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -91,9 +92,9 @@ const product_delete = async (req, res) => {
             console.log(filePath);
             fs.unlinkSync(filePath);
             get.delete();
-            return res.status(200).json("product delete successfully");
+            return res.status(200).json({ status: true, message: "product delete successfully" });
         } else {
-            return res.status(400).json("product not exist");
+            return res.status(400).json({ status: false, message: "product not exist" });
         }
     }
     catch (error) {

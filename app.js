@@ -17,7 +17,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public/images')));
 
-
 // all routes
 const adminroutes=require("./routes/admin");
 const userroutes=require("./routes/user");
