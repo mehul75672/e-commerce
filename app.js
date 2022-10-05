@@ -18,19 +18,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public/images')));
 
 // all routes
-const adminroutes=require("./routes/admin");
-const userroutes=require("./routes/user");
+const adminroutes = require("./routes/admin");
+const userroutes = require("./routes/user");
 
 app.use(adminroutes);
 app.use(userroutes);
 require('./seeder/admin')
 
-
-
 app.get("/", (req, res) => {
   res.status(200).send("hello");
 })
-
 
 const PORT = process.env.port;
 app.listen(PORT, process.env.HOSTNAME, () => {
