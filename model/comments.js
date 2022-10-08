@@ -13,7 +13,11 @@ var commentSchema = new mongoose.Schema({
         type:String,
         required:"this filed is required"
     },
-    commentid:{
+    user_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:"this filed is required"
+    },
+    like_comments_id:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'like_comments'
     }

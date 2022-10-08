@@ -33,19 +33,41 @@ const product_all = async (req, res) => {
         const all = await product.aggregate([
             {
                 $lookup: {
+                    from: 'brands',
+                    localField: 'brands_id',
+                    foreignField: '_id',
+                    as: 'brands'
+                }
+            },{
+              $unwind:{
+                path:"$brands",
+                preserveNullAndEmptyArrays:true
+              } 
+            },
+            {
+                $lookup: {
                     from: 'categories',
                     localField: 'category_id',
                     foreignField: '_id',
                     as: 'category'
                 },
 
-            },
+            },{
+                $unwind:{
+                  path:"$category",
+                  preserveNullAndEmptyArrays:true
+                } 
+              },
             {
-                $lookup: {
-                    from: 'brands',
-                    localField: 'brands_id',
-                    foreignField: '_id',
-                    as: 'brands'
+                $project: {
+                    " _id": 1,
+                    "name": 1,
+                    "product_img": 1,
+                    "price": 1,
+                    "discount": 1,
+                    "brands.name": 1,
+                    "category.category_name": 1,
+
                 }
             }
         ]);

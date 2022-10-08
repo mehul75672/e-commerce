@@ -1,4 +1,5 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+
 const product_schema = new mongoose.Schema({
     category_id: {
         type: mongoose.Types.ObjectId,
@@ -26,9 +27,28 @@ const product_schema = new mongoose.Schema({
     status: {
         type: Boolean,
         default: true
-    }
-}, {
-    timestamps: true
-});
+    },
+    like: {
+        type: Array
+    },
+    comments: [
+        {
+            text: {
+                type: String,
+            },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+            }, 
+            createdAt:{
+                type:Date,
+                default:Date.now
+            }          
+        }
+           
+    ]
+},
+    {
+        timestamps: true
+    });
 
 module.exports = mongoose.model("product", product_schema);
