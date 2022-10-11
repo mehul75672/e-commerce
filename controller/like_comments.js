@@ -1,5 +1,5 @@
 const product = require("../model/product");
-
+const User = require("../model/User");
 
 const like = async (req, res) => {
     let id = req.params.id
@@ -19,18 +19,11 @@ const like = async (req, res) => {
 const totallike = async (req, res) => {
     try {
         const a = await product.aggregate([
-
             {
                 $addFields: {
                     "totallike": { $size: "$like" }
                 }
-            }, {
-                $unwind: {
-                    path: "$like",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            
+            }
         ]);
         res.send(a);
 
@@ -38,6 +31,7 @@ const totallike = async (req, res) => {
         return res.status(500).json({ error: error.messages })
     }
 }
+
 
 
 const comment_add = async (req, res) => {
@@ -53,5 +47,8 @@ const comment_add = async (req, res) => {
     })
     return res.status(200).json({ messages: "comments" });
 }
-
 module.exports = { like, totallike, comment_add }; 
+
+
+
+

@@ -6,22 +6,25 @@ const path = require("path")
 const { json } = require("express");
 
 
-//admin
+//admin  
 const product_add = async (req, res) => {
     try {
         if (req.body.discount >= 100) {
             return res.status(400).json({ status: false, message: "discount min 100" });
         }
+        let a = req.body.tags
+
         const add = new product({
             category_id: req.body.category_id,
             brands_id: req.body.brands_id,
+            tags: a,
             name: req.body.name,
             product_img: req.file.filename,
             price: req.body.price,
             discount: req.body.discount
         })
         await add.save();
-        return res.status(201).json({ status: true, message: "product add successfully" });
+        return res.status(201).json({ status: true, message: "product add successfully", result: add });
 
     } catch (error) {
         return res.status(500).json({ error: error.message })
@@ -30,53 +33,61 @@ const product_add = async (req, res) => {
 
 const product_all = async (req, res) => {
     try {
-        const all = await product.aggregate([
-            {
-                $lookup: {
-                    from: 'brands',
-                    localField: 'brands_id',
-                    foreignField: '_id',
-                    as: 'brands'
-                }
-            },{
-              $unwind:{
-                path:"$brands",
-                preserveNullAndEmptyArrays:true
-              } 
-            },
-            {
-                $lookup: {
-                    from: 'categories',
-                    localField: 'category_id',
-                    foreignField: '_id',
-                    as: 'category'
-                },
-
-            },{
-                $unwind:{
-                  path:"$category",
-                  preserveNullAndEmptyArrays:true
-                } 
-              },
-            {
-                $project: {
-                    " _id": 1,
-                    "name": 1,
-                    "product_img": 1,
-                    "price": 1,
-                    "discount": 1,
-                    "brands.name": 1,
-                    "category.category_name": 1,
-
-                }
+        const all = await product.aggregate([{ $match: {} },
+        {
+            $lookup: {
+                from: 'brands',
+                localField: 'brands_id',
+                foreignField: '_id',
+                as: 'brands'
             }
-        ]);
+        },
+        {
+            $unwind: {
+                path: "$brands",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'category_id',
+                foreignField: '_id',
+                as: 'category'
+            },
 
+        },
+        {
+            $unwind: {
+                path: "$category",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                " _id": 1,
+                "name": 1,
+                "product_img": 1,
+                "price": 1,
+                "discount": 1,
+                "brands.name": 1,
+                "category.category_name": 1,
+                "tags": 1
+
+            }
+        }
+        ]);
+        // let a = []
+        // const all = await product.find().populate("category_id", "category_name").populate("brands_id", "name");
+        // all.map((f) => {
+        //     a.push({ category_name: f.category_id.category_name })
+        //     })
         return res.status(200).json({ status: true, result: all });
     } catch (error) {
         return res.status(500).json({ error: error.message })
     }
 }
+
 
 const product_update = async (req, res) => {
     try {
@@ -104,7 +115,6 @@ const product_update = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 }
-
 const product_delete = async (req, res) => {
     const id = req.params.id
     try {
@@ -132,7 +142,7 @@ const product_getone = async (req, res) => {
 }
 
 
-//user
+//user 
 const product_discount = async (req, res) => {
     try {
         const discount = await product.find({ discount: { $gt: 50 } });
@@ -141,6 +151,27 @@ const product_discount = async (req, res) => {
         return res.status(500), json({ error: error.message });
     }
 }
+
+
+const get = async (req, res) => {
+    try {
+        let a = req.body.tags
+        const tags = await product.find({ tags: a })
+        return res.send(tags);
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+}
+
+const searc = async (req, res) => {
+    try {
+        const a = await product.find({ $or: [{ tags: { '$regex': req.query.dsearch } }, { name: { '$regex': req.query.dsearch } }] })
+        return res.status(200).json(a);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 const new_arrivals = async (req, res) => {
     try {
@@ -167,4 +198,4 @@ const productgetbrands = async (req, res) => {
 }
 
 
-module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productgetbrands, product_update, product_getone };
+module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productgetbrands, product_update, product_getone, get, searc };

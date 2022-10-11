@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    followers:{
+        type: Array
+    },
+    following:{
+        type: Array
+    },
     status:{
         type:Boolean,
         default:false

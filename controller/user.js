@@ -5,7 +5,8 @@ var validator = require("email-validator");
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
-const otpGenerator = require('otp-generator')
+const otpGenerator = require('otp-generator');
+const { default: mongoose } = require('mongoose');
 
 
 const adduser = async (req, res) => {
@@ -174,7 +175,45 @@ const forgotpassword = async (req, res) => {
     }
 }
 
-module.exports = { adduser, loginuser, all_user, changePassword, pagination, forgotpasstoken, forgotpassword }
+const follow = async (req, res) => {
+    let id = req.params.id
+    let find = await Users.findById(id);
+    let user = req.send;
+    var a = await find.followers.includes(user.id);
+    if (a) {
+        await Users.findByIdAndUpdate(id, { $pull: { followers: user.id } });
+        await Users.findByIdAndUpdate(user.id, { $pull: { following: id } });
+        return res.status(200).json({ messages: "unfollow" });
+    }
+    else {
+        await Users.findByIdAndUpdate(id, { $push: { followers: user.id } });
+        await Users.findByIdAndUpdate(user.id, { $push: { following: id } });
+        return res.status(200).json({ messages: "follow" });
+    }
+}
+
+const totalfollowers = async (req, res) => {
+    try {
+        const a = await Users.aggregate([
+            {
+                $match: { _id: mongoose.Types.ObjectId(req.send.id) }
+            },
+            {
+                $addFields: {
+                    following: { $size: "$following" },
+                    followers: { $size: "$followers" }
+                }
+            }
+        ]);
+        return res.status(200).json({status:true,result:a});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: error.messages })
+    }
+}
+
+
+module.exports = { adduser, loginuser, all_user, changePassword, pagination, forgotpasstoken, forgotpassword, follow, totalfollowers }
 
 
 

@@ -10,6 +10,9 @@ const product_schema = new mongoose.Schema({
         required: true,
         ref: "brands"
     },
+    tags:{
+           type:Array
+    },
     name: {
         type: String,
         required: true
@@ -38,6 +41,7 @@ const product_schema = new mongoose.Schema({
             },
             user_id: {
                 type: mongoose.Schema.Types.ObjectId,
+                ref:"User"
             }, 
             createdAt:{
                 type:Date,

@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public/images')));
 
-// all routes
+//all routes
 const adminroutes = require("./routes/admin");
 const userroutes = require("./routes/user");
 
@@ -26,10 +26,15 @@ app.use(userroutes);
 require('./seeder/admin')
 
 app.get("/", (req, res) => {
-  res.status(200).send("hello");
+  res.status(200).send("welcome to home page");
 })
 
 const PORT = process.env.port;
 app.listen(PORT, process.env.HOSTNAME, () => {
   console.log(`Server running at http://${process.env.HOSTNAME}:${PORT}`)
 });
+
+app.all('*', function (req, res, next) {
+  console.log('only applied for routes that begin with /api');
+  return res.status(404).json({ error: "page not found" });
+})
