@@ -30,7 +30,7 @@ const brands_delete = async (req, res) => {
             const filePath = path.join(__dirname, process.env.images + ge.product_img);
             fs.unlinkSync(filePath);
             ge.delete();
-         } 
+         }
          return res.status(200).json({ status: true, message: "brands delete successfully" });
       } else {
          return res.status(404).json({ status: false, message: "brands not exist" });
@@ -76,8 +76,12 @@ const brands_all = async (req, res) => {
 }
 
 const brands_getone = async (req, res) => {
-   var id = req.params.id
-   const one = await brands.findById(id);
-   return res.status(200).json({ status: true, result: one });
+   try {
+      var id = req.params.id
+      const one = await brands.findById(id);
+      return res.status(200).json({ status: true, result: one });
+   } catch (error) {
+      return res.status(500).json({ status: false, error: error.messages })
+   }
 }
 module.exports = { brands_add, brands_delete, brands_update, brands_all, brands_getone };

@@ -55,9 +55,9 @@ const category_delete = async (req, res) => {
                 const filePath = path.join(__dirname, process.env.images + ge.product_img);
                 console.log(filePath);
                 fs.unlinkSync(filePath);
-                ge.delete(); 
-            } 
-             return res.status(200).json({ status: false, message: "category delete successfully" });
+                ge.delete();
+            }
+            return res.status(200).json({ status: false, message: "category delete successfully" });
         } else {
             return res.status(400).json({ status: false, message: "category not exist" });
         }
@@ -69,14 +69,22 @@ const category_delete = async (req, res) => {
 }
 
 const category_get = async (req, res) => {
-    const all = await category.find().limit(11);
-    return res.status(200).json({ status: true, result: all });
+    try {
+        const all = await category.find().limit(11);
+        return res.status(200).json({ status: true, result: all });
+    } catch (error) {
+        return res.status(500).json({ status: false, error: error.messages })
+    }
 }
 
 const category_getone = async (req, res) => {
-    var id = req.params.id
-    const one = await category.findById(id);
-    return res.status(200).json({ status: true, result: one });
+    try {
+        var id = req.params.id
+        const one = await category.findById(id);
+        return res.status(200).json({ status: true, result: one });
+    } catch (error) {
+        return res.status(500).json({ status: false, error: error.messages })
+    }
 }
 
 module.exports = { category_add, category_delete, category_get, category_update, category_getone };

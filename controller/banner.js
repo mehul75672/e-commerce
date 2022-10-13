@@ -23,7 +23,6 @@ const banner_update = async (req, res) => {
    try {
       const id = req.params.id
       const get = await banner.findById(id);
-      console.log(req.body.banner_desc);
       let images
       if (req.file) {
          images = req.file.filename
@@ -78,9 +77,13 @@ const banner_all = async (req, res) => {
 }
 
 const banner_getone = async (req, res) => {
-   var id = req.params.id
-   const one = await banner.findById(id);
-   return res.status(200).json({ status: true, result: one });
+   try {
+      var id = req.params.id
+      const one = await banner.findById(id);
+      return res.status(200).json({ status: true, result: one });
+   } catch (error) {
+      return res.status(500).json({ status: false, error: error.messages })
+   }
 }
 
 module.exports = { banner_add, banner_all, banner_delete, banner_update, banner_getone };

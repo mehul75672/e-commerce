@@ -1,9 +1,9 @@
-"use strict";
+"use strict"
 const product = require("../model/product");
 
 const fs = require("fs");
 const path = require("path")
-const { json } = require("express");
+
 
 
 //admin  
@@ -13,7 +13,6 @@ const product_add = async (req, res) => {
             return res.status(400).json({ status: false, message: "discount min 100" });
         }
         let a = req.body.tags
-
         const add = new product({
             category_id: req.body.category_id,
             brands_id: req.body.brands_id,
@@ -77,17 +76,11 @@ const product_all = async (req, res) => {
             }
         }
         ]);
-        // let a = []
-        // const all = await product.find().populate("category_id", "category_name").populate("brands_id", "name");
-        // all.map((f) => {
-        //     a.push({ category_name: f.category_id.category_name })
-        //     })
         return res.status(200).json({ status: true, result: all });
     } catch (error) {
         return res.status(500).json({ error: error.message })
     }
 }
-
 
 const product_update = async (req, res) => {
     try {
@@ -115,6 +108,7 @@ const product_update = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 }
+
 const product_delete = async (req, res) => {
     const id = req.params.id
     try {
@@ -148,7 +142,7 @@ const product_discount = async (req, res) => {
         const discount = await product.find({ discount: { $gt: 50 } });
         return res.status(200).json({ status: true, result: discount })
     } catch (error) {
-        return res.status(500), json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
 
@@ -157,9 +151,9 @@ const get = async (req, res) => {
     try {
         let a = req.body.tags
         const tags = await product.find({ tags: a })
-        return res.send(tags);
+        return res.status(200).json({status:true,result:tags});
     } catch (error) {
-        return res.status(400).json(error)
+        return res.status(500).json({ error: error.message });
     }
 }
 
@@ -168,7 +162,7 @@ const searc = async (req, res) => {
         const a = await product.find({ $or: [{ tags: { '$regex': req.query.dsearch } }, { name: { '$regex': req.query.dsearch } }] })
         return res.status(200).json(a);
     } catch (error) {
-        console.log(error);
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -183,9 +177,10 @@ const new_arrivals = async (req, res) => {
         }).limit(6);
         return res.status(200).json({ status: true, result: discount })
     } catch (error) {
-        return res.status(500), json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
+
 
 const productgetbrands = async (req, res) => {
     const id = req.params.id
@@ -193,9 +188,28 @@ const productgetbrands = async (req, res) => {
         const discount = await product.find({ brands_id: id });
         return res.status(200).json({ status: true, result: discount })
     } catch (error) {
-        return res.status(500), json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
 
 
 module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productgetbrands, product_update, product_getone, get, searc };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let a = []
+// const all = await product.find().populate("category_id", "category_name").populate("brands_id", "name");
+// all.map((f) => {
+//     a.push({ category_name: f.category_id.category_name })
+//     })

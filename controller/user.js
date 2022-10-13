@@ -6,8 +6,6 @@ var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const otpGenerator = require('otp-generator');
-const { default: mongoose } = require('mongoose');
-
 
 const adduser = async (req, res) => {
     try {
@@ -64,7 +62,7 @@ const loginuser = async (req, res) => {
         if (!valid_password) {
             return res.status(400).json({ status: false, message: "Invalid Email And Password" });
         }
-        const token = await jwt.sign({ id: login.id }, process.env.SECRETKEY, { expiresIn: "8h" });
+        const token = await jwt.sign({ id: login.id }, process.env.SECRETKEY);
         return res.status(200).json({ status: true, token, result: login });
     }
     catch (error) {
@@ -176,19 +174,24 @@ const forgotpassword = async (req, res) => {
 }
 
 const follow = async (req, res) => {
-    let id = req.params.id
-    let find = await Users.findById(id);
-    let user = req.send;
-    var a = await find.followers.includes(user.id);
-    if (a) {
-        await Users.findByIdAndUpdate(id, { $pull: { followers: user.id } });
-        await Users.findByIdAndUpdate(user.id, { $pull: { following: id } });
-        return res.status(200).json({ messages: "unfollow" });
-    }
-    else {
-        await Users.findByIdAndUpdate(id, { $push: { followers: user.id } });
-        await Users.findByIdAndUpdate(user.id, { $push: { following: id } });
-        return res.status(200).json({ messages: "follow" });
+    try {
+        let id = req.params.id
+        let isfollow = req.query.isfollow;
+        let user = req.send;
+        let condition = {};
+        let condition1 = {};
+        if (!isfollow === "follow") {
+            condition = { $pull: { followers: user.id } }
+            condition1 = { $pull: { following: id } }
+        } else {
+            condition = { $push: { followers: user.id } }
+            condition1 = { $push: { following: id } }
+        }
+        await Users.findByIdAndUpdate(id, condition);
+        await Users.findByIdAndUpdate(user.id, condition1);
+        return res.status(200).json({ status: true, message: isfollow });
+    } catch (error) {
+        return res.status(500).json({ status: false, error: error.messages })
     }
 }
 
@@ -205,13 +208,12 @@ const totalfollowers = async (req, res) => {
                 }
             }
         ]);
-        return res.status(200).json({status:true,result:a});
+        return res.status(200).json({ status: true, result: a });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: error.messages })
     }
 }
-
 
 module.exports = { adduser, loginuser, all_user, changePassword, pagination, forgotpasstoken, forgotpassword, follow, totalfollowers }
 
