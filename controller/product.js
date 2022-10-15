@@ -64,7 +64,6 @@ const product_all = async (req, res) => {
         },
         {
             $project: {
-                " _id": 1,
                 "name": 1,
                 "product_img": 1,
                 "price": 1,
@@ -72,7 +71,6 @@ const product_all = async (req, res) => {
                 "brands.name": 1,
                 "category.category_name": 1,
                 "tags": 1
-
             }
         }
         ]);

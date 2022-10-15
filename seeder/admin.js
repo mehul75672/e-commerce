@@ -5,9 +5,10 @@ const admin = async (req, res) =>{
     if (!existuser) {
         const hash = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
         await user.create({
-            firstname:"mehul",
-            lastname:"vaniya",
-            fullname:"mehul vaniya",
+            
+            firstname:"nirav",
+            lastname:"gorasiya",
+            fullname:"nirav gorasiya",
             email:process.env.ADMIN_EMAIL,
             password:hash,
             status:true     

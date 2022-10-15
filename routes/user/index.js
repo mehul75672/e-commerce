@@ -5,7 +5,8 @@ const user = require("./user");
 const like = require("./like_comments")
 const category = require("./category")
 const brands=require("./brands")
-const banner=require("./banner")
+const banner=require("./banner");
+const message = require('./message');
 
 
 const prefix = "/api/user"
@@ -15,6 +16,7 @@ router.use(prefix+"/brands",brands)
 router.use(prefix + "/category",category);
 router.use(prefix+"/banners",banner)
 router.use(prefix , like)
+router.use(prefix ,message)
 module.exports = router;
 
 

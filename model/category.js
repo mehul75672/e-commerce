@@ -13,4 +13,12 @@ const categorySchema = new mongoose.Schema({
         default:true
     }
 }, { timestamps: true });
+
+categorySchema.methods.toJSON = function () {
+    const branch = this;
+    const branchObj = branch.toObject();
+    delete branchObj.__v;
+    delete branchObj._id;
+    return branchObj;
+};
 module.exports = mongoose.model("category", categorySchema);

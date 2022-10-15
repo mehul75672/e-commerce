@@ -10,8 +10,8 @@ const product_schema = new mongoose.Schema({
         required: true,
         ref: "brands"
     },
-    tags:{
-           type:Array
+    tags: {
+        type: Array
     },
     name: {
         type: String,
@@ -41,18 +41,26 @@ const product_schema = new mongoose.Schema({
             },
             user_id: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref:"User"
-            }, 
-            createdAt:{
-                type:Date,
-                default:Date.now
-            }          
+                ref: "User"
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            }
         }
-           
+
     ]
 },
     {
         timestamps: true
     });
 
+product_schema.methods.toJSON = function () {
+    const branch = this;
+    const branchObj = branch.toObject();
+    console.log(branchObj,"vDV");
+    delete branchObj.__v;
+    delete branchObj.results._id;
+    return branchObj;
+};
 module.exports = mongoose.model("product", product_schema);

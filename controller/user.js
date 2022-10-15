@@ -180,14 +180,14 @@ const follow = async (req, res) => {
         let user = req.send;
         let condition = {};
         let condition1 = {};
-        if (!isfollow === "follow") {
+        if (isfollow === "follow") {
+            condition = { $addToSet: { followers: user.id } }
+            condition1 = { $addToSet: { following: id } }
+        } else {
             condition = { $pull: { followers: user.id } }
             condition1 = { $pull: { following: id } }
-        } else {
-            condition = { $push: { followers: user.id } }
-            condition1 = { $push: { following: id } }
         }
-        await Users.findByIdAndUpdate(id, condition);
+        await Users.findByIdAndUpdate(id, condition);   
         await Users.findByIdAndUpdate(user.id, condition1);
         return res.status(200).json({ status: true, message: isfollow });
     } catch (error) {
