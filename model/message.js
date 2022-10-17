@@ -1,16 +1,18 @@
 var mongoose = require("mongoose")
 const messageschema = mongoose.Schema({
-    gruapname: {
+    groupname: {
         type: String
     },
     admin: {
-        type: Array
+        type: Array,
+        ref:"users"
     },
     users_id:
     {
-        type: Array
+        type: Array,
+        ref:"users"
     },
-    messages: [
+    messages:[
         {
             name: String,
             text: String,
