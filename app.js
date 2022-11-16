@@ -18,28 +18,29 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public/images')));
 
 //all routes
-const adminroutes = require("./routes/admin");
-const userroutes = require("./routes/user");
+const admin_routes = require("./routes/admin");
+const user_routes = require("./routes/user");
 
-app.use(adminroutes);
-app.use(userroutes);
+app.use(admin_routes);
+app.use(user_routes);
 require('./seeder/admin')
 
 app.get("/", (req, res) => {
   res.status(200).send("welcome to home page");
 })
 
+
 const PORT = process.env.port;
-app.listen(PORT, process.env.HOSTNAME, () => {
-  console.log(`Server running at http://${process.env.HOSTNAME}:${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}/`)
+});
+
+app.get('/', (req, res) => {
+  res.send("<button><a href='/user'>Login With Google</a></button>")
 });
 
 
- 
 app.all('*', function (req, res, next) {
   console.log('only applied for routes that begin with /api');
   return res.status(404).json({ error: "page not found" });
 })
-
-
-
