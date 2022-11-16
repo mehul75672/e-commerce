@@ -52,9 +52,10 @@ router.get('/user/callback',
 
 // Success 
 router.get('/user/callback/success', (req, res) => {
+ 
   if (!req.user)
       res.redirect('/user/callback/failure');
-  res.send("Welcome " + req.user.email);
+  res.send(`Welcome ${req.user.email}<br><br><image src="${req.user.picture}" height="20%" width="20%"> <br><br><button><a href='/'>log out</a></button> `);
 });
 
 // failure
