@@ -34,7 +34,7 @@ passport.use(new GoogleStrategy({
 
 
 router.get('/', (req, res) => {
-  res.send("<button><a href='/user'>Login With Google</a></button>")
+  res.send(`<button><a href='/user'>Login With Google</a></button> <br> <button><a href='/auth/facebook'>Login With facebook</a></button>`)
 });
 
 // Auth 

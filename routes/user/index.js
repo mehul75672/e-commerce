@@ -8,6 +8,7 @@ const brands=require("./brands")
 const banner=require("./banner");
 const message = require('./message');
 const Google_auth=require('./google_auth');
+const facebook_auth=require("./facebook_auth")
 
 const prefix = "/api/user"
 router.use(prefix, user);
@@ -18,6 +19,7 @@ router.use(prefix+"/banners",banner)
 router.use(prefix , like)
 router.use(prefix ,message)
 router.use(Google_auth)
+router.use(facebook_auth)
 module.exports = router;
 
 

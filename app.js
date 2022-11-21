@@ -17,20 +17,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public/images')));
 
-
-app.get("/", (req, res) => {
-  res.status(200).send("welcome to home page");
-})
+// app.get("/", (req, res) => {
+//   res.status(200).send("welcome to home page");
+// })
 
 //all routes
 const admin_routes = require("./routes/admin");
 const user_routes = require("./routes/user");
+const datas = require('./model/datas');
 
 app.use(admin_routes);
 app.use(user_routes);
 require('./seeder/admin')
-
-
+//app.get("/getdata",async(req,res)=>{
+//   var dateArray = [];
+//   var currentDate = moment(startDate);
+//   var stopDate = moment(stopDate);
+//   while (currentDate <= stopDate) {
+//       dateArray.push( moment(currentDate).format('YYYY-MM-DD') )
+//       currentDate = moment(currentDate).add(1, 'days');
+//   }
+//   return dateArray;
+//})
 const PORT = process.env.port;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`)

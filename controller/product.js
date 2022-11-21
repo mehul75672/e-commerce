@@ -111,15 +111,13 @@ const product_delete = async (req, res) => {
     const id = req.params.id
     try {
         const get = await product.findById(id);
-        if (get) {
-            const filePath = path.join(__dirname, process.env.images + get.product_img);
-            console.log(filePath);
-            fs.unlinkSync(filePath);
-            get.delete();
-            return res.status(200).json({ status: true, message: "product delete successfully" });
-        } else {
+        if (!get) {
             return res.status(400).json({ status: false, message: "product not exist" });
-        }
+        } 
+        const filePath = path.join(__dirname, process.env.images + get.product_img);
+        fs.unlinkSync(filePath);
+        get.delete();
+        return res.status(200).json({ status: true, message: "product delete successfully" });
     }
     catch (error) {
         console.log(error);
@@ -155,6 +153,7 @@ const get = async (req, res) => {
     }
 }
 
+
 const searc = async (req, res) => {
     try {
         const a = await product.find({ $or: [{ tags: { '$regex': req.query.dsearch } }, { name: { '$regex': req.query.dsearch } }] })
@@ -163,7 +162,6 @@ const searc = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 };
-
 
 const new_arrivals = async (req, res) => {
     try {
@@ -192,22 +190,3 @@ const productgetbrands = async (req, res) => {
 
 
 module.exports = { product_add, product_all, product_delete, product_discount, new_arrivals, productgetbrands, product_update, product_getone, get, searc };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let a = []
-// const all = await product.find().populate("category_id", "category_name").populate("brands_id", "name");
-// all.map((f) => {
-//     a.push({ category_name: f.category_id.category_name })
-//     })

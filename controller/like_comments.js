@@ -33,7 +33,7 @@ const totallike = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: false, error: error.messages })
     }
-}
+}   
 
 
 const comment_add = async (req, res) => {
