@@ -2,19 +2,20 @@
 const product = require("../model/product");
 
 const like = async (req, res) => {
+
     try {
         let id = req.params.id
-        let find = await product.findById(id);
+        let islike = req.query.islike
         let user = req.send;
-        var a = await find.like.includes(user.id);
-        if (a) {
-            await product.findByIdAndUpdate(id, { $pull: { like: user.id } })
-            return res.status(200).json({ messages: "unlike" });
+        var condition = {}
+        if (islike === "like") {
+            condition = { $addToSet: { like: user.id } }
         }
         else {
-            await product.findByIdAndUpdate(id, { $push: { like: user.id } })
-            return res.status(200).json({ messages: "like" })
+            condition = { $pull: { like: user.id } }
         }
+        await product.findByIdAndUpdate(id, condition)
+        return res.status(200).json({ messages: islike });
     } catch (error) {
         return res.status(500).json({ status: false, error: error.messages })
     }
@@ -33,7 +34,7 @@ const totallike = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: false, error: error.messages })
     }
-}   
+}
 
 
 const comment_add = async (req, res) => {
@@ -56,5 +57,23 @@ const comment_add = async (req, res) => {
 module.exports = { like, totallike, comment_add };
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+// const like = async (req, res) => {
+//     try {
+//         let id = req.params.id
+//         let find = await product.findById(id);
+//         let user = req.send;
+//         var a = await find.like.includes(user.id);     
+//         if (a) {
+//             await product.findByIdAndUpdate(id, { $pull: { like: user.id } })
+//             return res.status(200).json({ messages: "unlike" });
+//         }
+//         else {
+//             await product.findByIdAndUpdate(id, { $push: { like: user.id } })
+//             return res.status(200).json({ messages: "like" })
+//         }
+//     } catch (error) {
+//         return res.status(500).json({ status: false, error: error.messages })
+//     }
+// }
