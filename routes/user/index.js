@@ -1,5 +1,6 @@
 var router = require('express').Router();
 
+const order=require('./order')
 const product = require("./product")
 const user = require("./user");
 const like = require("./like_comments")
@@ -20,6 +21,7 @@ router.use(prefix , like)
 router.use(prefix ,message)
 router.use(Google_auth)
 router.use(facebook_auth)
+router.use(prefix,order)
 module.exports = router;
 
 

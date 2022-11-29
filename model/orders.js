@@ -1,43 +1,69 @@
 const { default: mongoose, models } = require("mongoose");
 
-const orders= mongoose.Schema({
-    product_id:{
-        type:mongoose.Types.ObjectId
+const orders = mongoose.Schema({
+    user_id: {
+        type: mongoose.Types.ObjectId
     },
-    Quantity:{
-       type:Number
-    },
-    user_id:{
-         type:mongoose.Types.ObjectId
-    },
-    status:{
-        type:String,
-        enum: ['scheduled','pending', 'preparing', 'ready', 'enroute', 'failed', 'cancelled', 'delivered'],
-        default:'pending'
-    }, 
-    payment_statusL:{
-        type:String,
-        enum:['pending', 'review', 'failed', 'cancelled', 'successful'],
-        default:'pending'
-    },
+    products: [
+        {
+            brand: {
+                type: String
+            },
+            product_id: {
+                type: mongoose.Types.ObjectId,
+                ref: "product"
+            },
+            product_name: {
+                type: String,
+            },
+            product_img: {
+                type: String
+            },
+            size: {
+                type: Number
+            },
+            color: {
+                type: String
+            },
+            price: {
+                type: Number,
+            },
+            quantity: {
+                type: Number
+            }
+        }
+    ],
     total_price:
     {
-        type:Number
+        type: Number
     },
-    discount:{
-        type:Number
+    discount: {
+        type: Number
     },
-    delivery_fee:{
-        type:Number
+    payment_method_id: {
+        type: mongoose.Types.ObjectId
     },
-    delivery_date:{
-        type:Date
+    payment_status: {
+        type: String,
+        enum: ['pending', 'review', 'failed', 'cancelled', 'successful'],
+        default: 'pending'
     },
-    payment_metgod_id:{
-        type:mongoose.Types.ObjectId
+    delivery_fee: {
+        type: Number
     },
-},{
+    delivery_date: {
+        type: Date
+    },
+    Date:{
+        type:String
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'ready', 'failed', 'cancelled', 'delivered'],
+        default: 'pending'
+    },
+}, {
     timestamps: true
 });
 
-module.exports=mongoose.model("orders",orders);
+module.exports = mongoose.model("orders", orders);

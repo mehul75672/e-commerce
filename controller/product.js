@@ -165,17 +165,12 @@ const searc = async (req, res) => {
 
 const new_arrivals = async (req, res) => {
     try {
-        const discount = await product.find({
-            "createdAt": {
-                $lt: new Date(),
-                $gte: new Date(new Date().setDate(new Date().getDate() - 5))
-            }
-        }).limit(6);
+        const discount = await product.find().sort({'createdAt':-1});
         return res.status(200).json({ status: true, result: discount })
-    } catch (error) {
+    } catch (error) { 
         return res.status(500).json({ error: error.message });
     }
-}
+}   
 
 
 const productgetbrands = async (req, res) => {

@@ -55,12 +55,12 @@ const product_schema = new mongoose.Schema({
         timestamps: true
     });
 
-product_schema.methods.toJSON = function () {
-    const branch = this;
-    const branchObj = branch.toObject();
-    console.log(branchObj,"vDV");
-    delete branchObj.__v;
-    delete branchObj.results._id;
-    return branchObj;
-};
+// product_schema.methods.toJSON = function () {
+//     const branch = this;
+//     const branchObj = branch.toObject();
+//     console.log(branchObj,"vDV");
+//     delete branchObj.__v;
+//     delete branchObj.results._id;
+//     return branchObj;
+// };
 module.exports = mongoose.model("product", product_schema);
