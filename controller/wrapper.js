@@ -98,7 +98,7 @@ const alldata = async (req, res) => {
     var data = []
     var m = 0
     for (let index = 0; index <= m; index++) {
-      const x = new Date(new Date().setDate(new Date().getDate(req.query.name) - index))
+      const x = new Date(new Date().setDate(new Date().getDate() - index))
       const date = x.toISOString().slice(0, 10)
       const changeDateFormatTo = date => {
         const [yy, mm, dd] = date.split(/-/g);
