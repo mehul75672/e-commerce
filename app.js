@@ -49,3 +49,8 @@ app.all('*', function (req, res, next) {
   console.log('only applied for routes that begin with /api');
   return res.status(404).json({ error: "page not found" });
 })
+
+
+
+
+
